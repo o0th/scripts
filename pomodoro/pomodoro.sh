@@ -5,5 +5,10 @@ for ((i = 1; i <= minutes; i++)); do
   output+=" "
 done
 
-output+=" $(/home/o0th/go/bin/pomodoro status --format "%R")"
-echo -e "$output"
+if ((minutes == 0)); then
+  output+=""
+else
+  output+=""
+fi
+
+echo -e " $output "
