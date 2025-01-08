@@ -1,5 +1,5 @@
 minutes=$(/home/o0th/go/bin/pomodoro status --format "%R")
-ouput=""
+output=""
 
 for ((i = 1; i <= minutes; i++)); do
   output+=" "
