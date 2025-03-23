@@ -2,34 +2,35 @@
 
 session="chocops"
 
-libchoc="~/Repositories/chocops/libchoc"
-auth="~/Repositories/chocops/auth"
-vogon="~/Repositories/chocops/vogon"
+base_dir=~/Repositories/chocops/
+
+projects=(
+  "infrastructure"
+  "libchoc"
+  "auth"
+  "vogon"
+  "dash"
+)
+
+setup_window() {
+  local window_name=$1
+  local path=$2
+
+  tmux new-window -t $session -n "$window_name"
+  tmux send-keys -t $session "cd $path" C-m
+  tmux send-keys -t $session "clear" C-m
+  tmux split-window -l 18 -t $session
+  tmux send-keys -t $session "cd $path" C-m
+  tmux send-keys -t $session "clear" C-m
+}
 
 tmux has-session -t $session 2>/dev/null
 if [ $? != 0 ]; then
-	tmux new-session -d -s $session -n "fish" -x "$(tput cols)" -y "$(tput lines)"
+  tmux new-session -d -s $session -n "fish" -x "$(tput cols)" -y "$(tput lines)"
 
-	tmux new-window -t $session -n "libchoc"
-	tmux send-keys -t $session "cd $libchoc" C-m
-	tmux send-keys -t $session "clear" C-m
-	tmux split-window -l 18 -t $session
-	tmux send-keys -t $session "cd $libchoc" C-m
-	tmux send-keys -t $session "clear" C-m
-
-	tmux new-window -t $session -n "auth"
-	tmux send-keys -t $session "cd $auth" C-m
-	tmux send-keys -t $session "clear" C-m
-	tmux split-window -l 18 -t $session
-	tmux send-keys -t $session "cd $auth" C-m
-	tmux send-keys -t $session "clear" C-m
-
-	tmux new-window -t $session -n "vogon"
-	tmux send-keys -t $session "cd $vogon" C-m
-	tmux send-keys -t $session "clear" C-m
-	tmux split-window -l 18 -t $session
-	tmux send-keys -t $session "cd $vogon" C-m
-	tmux send-keys -t $session "clear" C-m
+  for i in "${!projects[@]}"; do
+    setup_window "${projects[$i]}" "$base_dir/${projects[$i]}"
+  done
 fi
 
 tmux attach-session -t $session
